@@ -1,0 +1,77 @@
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Whisper Ridge Example Map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+    h2 {margin: 10px; font-size: 1.2em;}
+    h3 {margin: 10px;}
+    h6 {margin: 5px; padding: 0;}
+    p {margin: 10px; padding: 0}
+    .map-overlay {position: absolute; bottom: 0; right: 0; background: rgba(255, 255, 255, 0.8); margin-right: 20px; font-family: Arial, sans-serif; overflow: auto; border-radius: 3px;}
+    #features {top: 0; height: 150px; margin-top: 10px; width: 410px;}
+    #legend {padding: 2px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); line-height: 15px; height: 95px; margin-bottom: 30px; width: 190px;}
+    .legend-key {display: inline-block; border-radius: 20%; width: 10px; height: 10px; margin-right: 5px;}
+    .difficult{height: 12px; width: 12px; background-color: #0539bd; display: inline-block;}
+    .advanced{height: 12px; width: 12px; background-color: #000000; display: inline-block;}
+  </style>
+</head>
+<body>
+
+<div id='map'></div>
+<div class='map-overlay' id='features'><h2>Whisper Ridge Backcountry Routes</h2><div id='pd'>
+<p><b>Click on a route to view its properties.</b><br />
+   <br />
+   The map below displays an example interactive map of Whisper Ridge backcountry routes. This is just an example of what your map could look like. </p></div></div>
+<div class='map-overlay' id='legend'></div>
+
+<div class='map-overlay' id='legend'>
+  <div class='legend-title'><p><b>Legend</b></p></div>
+    <p><span class="difficult"></span> Difficult Runs<br>
+    <span class ="advanced"></span> Advanced Runs<br></p>
+    <h6><i>Credit: Talty Topography LLC</i></h6>
+</div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoidGFsdHl0b3BvIiwiYSI6ImNqbDZ1ZHJkcDAydmczcG51NWM1b2gwMzAifQ.Pk_hS4XNsiWeZ7tyMT8a9w';
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/taltytopo/cjn0mhmoi58172snv0hef4sim',
+  center: [-111.69, 41.572],
+  zoom: 13
+});
+
+map.on('click', 'wr-exroutes-ar01t6', function (e) {
+  new mapboxgl.Popup()
+    .setLngLat(e.lngLat)
+    .setHTML('<h3>' + e.features[0].properties.Name +
+             '</h3><p><b>' + "Vertical Drop: " + '</b>' + e.features[0].properties.vert_drop + " feet" + '<br />' +
+             '<b>' + "Start Elevation: " + '</b>' + e.features[0].properties.start_elev + " feet" + '<br />' +
+             '<b>' + "Average Aspect: " + '</b>' + e.features[0].properties.avg_aspect + "&#176 " + e.features[0].properties.avg_direct + '<br />' +
+             '<b>' + "Maximum Slope Angle: " + '</b>' + e.features[0].properties.max_angle + "&#176" + '<br />' +
+             '<b>' + "Tree Cover: " + '</b>' + e.features[0].properties.avg_tree + "%" + '</p>')
+  .addTo(map);
+});
+
+map.on('mouseenter', 'wr-exroutes-ar01t6', function() {
+  map.getCanvas().style.cursor = 'pointer';
+});
+
+map.on('mouseleave', 'wr-exroutes-ar01t6', function() {
+  map.getCanvas().style.cursor = '';
+});
+
+map.touchZoomRotate.enable();
+
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'top-left');
+
+</script>
+
+</body>
+</html>
